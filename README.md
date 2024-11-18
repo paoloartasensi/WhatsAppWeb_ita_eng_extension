@@ -1,0 +1,1 @@
+L'estensione consente agli utenti di tradurre automaticamente i messaggi da italiano a inglese (e viceversa) su WhatsApp Web, migliorando la comunicazione con interlocutori che parlano lingue diverse. Il suo unico scopo è semplificare e automatizzare le traduzioni linguistiche direttamente nell'interfaccia di WhatsApp Web.
