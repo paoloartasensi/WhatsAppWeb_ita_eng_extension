@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "WhatsApp Translator",
+  "version": "1.0",
+  "description": "Translate WhatsApp messages from Italian to English",
+  "permissions": [],
+  "host_permissions": [
+    "https://web.whatsapp.com/*",
+    "https://api.mymemory.translated.net/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
