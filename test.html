@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Translator Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .test-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .test-button {
+            background: #00a884;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        
+        .test-result {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            min-height: 20px;
+        }
+        
+        .log-output {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>WhatsApp Translator Test Page</h1>
+    
+    <div class="test-section">
+        <h2>Translation Test</h2>
+        <p>Test the translation functions directly:</p>
+        
+        <input type="text" id="testInput" class="test-input" placeholder="Enter text to translate (Italian or English)">
+        <br>
+        <button onclick="testTranslation()" class="test-button">Test Translation</button>
+        <button onclick="testLanguageDetection()" class="test-button">Test Language Detection</button>
+        <button onclick="clearLog()" class="test-button">Clear Log</button>
+        
+        <div id="testResult" class="test-result"></div>
+        
+        <h3>Console Log:</h3>
+        <div id="logOutput" class="log-output"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>API Test</h2>
+        <p>Test the MyMemory API directly:</p>
+        <button onclick="testMyMemoryAPI()" class="test-button">Test MyMemory API</button>
+        <div id="apiResult" class="test-result"></div>
+    </div>
+
+    <script>
+        // Copy the translation functions from content.js for testing
+        const DEBUG = true;
+        const logOutput = document.getElementById('logOutput');
+        
+        function log(message) {
+            if (DEBUG) {
+                console.log(`[WhatsApp Translator] ${message}`);
+                logOutput.innerHTML += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+                logOutput.scrollTop = logOutput.scrollHeight;
+            }
+        }
+        
+        function clearLog() {
+            logOutput.innerHTML = '';
+        }
+        
+        function detectLanguage(text) {
+            log(`Detecting language for: "${text}"`);
+            
+            const italianWords = ['che', 'con', 'per', 'una', 'del', 'della', 'di', 'da', 'in', 'un', 'il', 'la', 'le', 'gli', 'sono', 'è', 'ho', 'hai', 'ha', 'abbiamo', 'avete', 'hanno', 'questo', 'questa', 'quello', 'quella', 'dove', 'quando', 'come', 'perché', 'però', 'anche', 'già', 'più', 'molto', 'tutto', 'tutti', 'tutte', 'non', 'ma', 'se', 'poi', 'così', 'suo', 'sua', 'loro', 'fare', 'dire', 'dopo', 'prima', 'altro', 'bene', 'qui', 'ora', 'anni', 'tempo', 'vita', 'mano', 'casa', 'paese'];
+            const englishWords = ['the', 'of', 'and', 'to', 'in', 'is', 'you', 'that', 'it', 'he', 'was', 'for', 'on', 'are', 'as', 'with', 'his', 'they', 'i', 'at', 'be', 'this', 'have', 'from', 'or', 'one', 'had', 'by', 'word', 'but', 'not', 'what', 'all', 'were', 'we', 'when', 'your', 'can', 'said', 'there', 'each', 'which', 'do', 'how', 'their', 'if', 'will', 'up', 'other', 'about', 'out', 'many', 'then', 'them', 'these', 'so', 'some', 'her', 'would', 'make', 'like', 'into', 'him', 'has', 'two', 'more', 'go', 'no', 'way', 'could', 'my', 'than', 'first', 'been', 'call', 'who', 'its', 'now', 'find', 'long', 'down', 'day', 'did', 'get', 'come', 'made', 'may', 'part'];
+            
+            const words = text.toLowerCase().split(/\s+/).filter(word => word.length > 1);
+            let italianScore = 0;
+            let englishScore = 0;
+            
+            words.forEach(word => {
+                if (italianWords.includes(word)) {
+                    italianScore++;
+                    log(`Italian word found: ${word}`);
+                }
+                if (englishWords.includes(word)) {
+                    englishScore++;
+                    log(`English word found: ${word}`);
+                }
+            });
+            
+            log(`Language scores - Italian: ${italianScore}, English: ${englishScore}`);
+            
+            if (italianScore === 0 && englishScore === 0) {
+                log('No recognized words, defaulting to Italian');
+                return 'it';
+            }
+            
+            const detectedLang = italianScore > englishScore ? 'it' : 'en';
+            log(`Detected language: ${detectedLang}`);
+            return detectedLang;
+        }
+        
+        async function translateText(text) {
+            log(`Translating: "${text}"`);
+            
+            const sourceLang = detectLanguage(text);
+            const targetLang = sourceLang === 'it' ? 'en' : 'it';
+            
+            log(`Detected language: ${sourceLang}, translating to: ${targetLang}`);
+            
+            try {
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}`;
+                log(`MyMemory API URL: ${url}`);
+                
+                const response = await fetch(url);
+                log(`MyMemory API response status: ${response.status}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                log('MyMemory API full response:', JSON.stringify(data, null, 2));
+
+                if (data.responseStatus === 200 && data.responseData?.translatedText) {
+                    const translatedText = data.responseData.translatedText;
+                    log(`Translation result: "${translatedText}"`);
+                    
+                    if (translatedText !== text && 
+                        translatedText.toLowerCase() !== text.toLowerCase() &&
+                        translatedText.trim() !== '') {
+                        return translatedText;
+                    }
+                    log('Translation is same as original or empty');
+                } else {
+                    log(`MyMemory API failed with status: ${data.responseStatus}`);
+                }
+            } catch (error) {
+                log(`MyMemory API error: ${error.message}`);
+            }
+            
+            // Fallback semplificato
+            log('Trying simple fallback translation...');
+            const simpleTranslations = {
+                'ciao': 'hello',
+                'hello': 'ciao',
+                'grazie': 'thank you',
+                'thank you': 'grazie',
+                'come stai': 'how are you',
+                'how are you': 'come stai',
+                'bene': 'good',
+                'good': 'bene',
+                'buongiorno': 'good morning',
+                'good morning': 'buongiorno'
+            };
+            
+            const lowerText = text.toLowerCase().trim();
+            if (simpleTranslations[lowerText]) {
+                log(`Using simple translation: ${simpleTranslations[lowerText]}`);
+                return simpleTranslations[lowerText];
+            }
+            
+            throw new Error('All translation methods failed');
+        }
+        
+        async function testTranslation() {
+            const input = document.getElementById('testInput');
+            const result = document.getElementById('testResult');
+            const text = input.value.trim();
+            
+            if (!text) {
+                result.textContent = 'Please enter some text';
+                return;
+            }
+            
+            result.textContent = 'Translating...';
+            
+            try {
+                const translation = await translateText(text);
+                result.innerHTML = `<strong>Original:</strong> ${text}<br><strong>Translation:</strong> ${translation}`;
+            } catch (error) {
+                result.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+        
+        function testLanguageDetection() {
+            const input = document.getElementById('testInput');
+            const result = document.getElementById('testResult');
+            const text = input.value.trim();
+            
+            if (!text) {
+                result.textContent = 'Please enter some text';
+                return;
+            }
+            
+            const language = detectLanguage(text);
+            result.innerHTML = `<strong>Text:</strong> ${text}<br><strong>Detected Language:</strong> ${language === 'it' ? 'Italian' : 'English'}`;
+        }
+        
+        async function testMyMemoryAPI() {
+            const result = document.getElementById('apiResult');
+            result.textContent = 'Testing API...';
+            
+            try {
+                const response = await fetch('https://api.mymemory.translated.net/get?q=hello&langpair=en|it');
+                const data = await response.json();
+                result.innerHTML = `<strong>API Response:</strong><br><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<strong>API Error:</strong> ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

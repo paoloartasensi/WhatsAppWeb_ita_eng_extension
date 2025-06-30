@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "WhatsApp Translator",
-  "version": "1.0",
-  "description": "Translate WhatsApp messages from Italian to English",
+  "name": "WhatsApp Translator IT⇄EN",
+  "version": "1.1",
+  "description": "Bidirectional translator for WhatsApp Web: Italian ⇄ English. Auto-detects language and translates messages in the input field.",
   "permissions": [],
   "host_permissions": [
     "https://web.whatsapp.com/*",
-    "https://api.mymemory.translated.net/*"
+    "https://api.mymemory.translated.net/*",
+    "https://libretranslate.de/*"
   ],
   "content_scripts": [
     {
